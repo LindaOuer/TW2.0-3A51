@@ -1,0 +1,52 @@
+<h1>Hello
+  {{ classe }}! ✅</h1>
+{# comments #}
+{% set pi = 3.14 %}
+{{ pi }}
+
+{% set tab = {
+
+  'fname': "Jane",
+  'lname': "Doe"
+
+} %}
+
+{{ tab['fname'] }}
+
+{% set persons = {
+  1: {
+    'fname': "Jane",
+    'lname': "Doe"
+  },
+  2: {
+    'fname': "John",
+    'lname': "Doe"
+  }
+} %}
+<table border="1" width='50%'>
+  {% for p in persons %}
+    <tr align="center">
+      <td>
+        {{ p.fname }}
+      </td>
+      <td>
+        {{ p.lname }}
+      </td>
+    </tr>
+  {% endfor %}
+</table>
+
+{% if persons is empty %}
+  <p>
+    No One There
+  </p>
+{% else %}
+  Total :
+  {{ persons | length}}
+{% endif %}
+
+{{ 'This is a random text' | trim | upper }}
+
+{% apply lower %}
+A TEXT WRITTEN IN UPPERCASE
+{% endapply %}
