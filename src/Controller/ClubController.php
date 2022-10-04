@@ -40,4 +40,28 @@ class ClubController extends AbstractController
             'clubs'=> $clubs
         ]);
     }
+
+    #[Route('/show/{id}', name: "clubDetails")]
+    public function show (ManagerRegistry $doctrine, $id):Response {
+        $club = $doctrine->getRepository(Club::class)->find($id);
+        return $this->render('club/showClub.html.twig', [
+            'club'=> $club
+        ]);
+    }
+
+    #[Route('/show1/{id}', name: "clubDetails1")]
+    public function show1 (ClubRepository $repo, $id):Response {
+        $club = $repo->find($id);
+        return $this->render('club/showClub.html.twig', [
+            'club'=> $club
+        ]);
+    }
+
+    #[Route('/show2/{id}', name: "clubDetails2")]
+    public function show2 (Club $club):Response {
+        
+        return $this->render('club/showClub.html.twig', [
+            'club'=> $club
+        ]);
+    }
 }
