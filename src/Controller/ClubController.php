@@ -6,6 +6,9 @@ use App\Entity\Club;
 use App\Repository\ClubRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -81,5 +84,41 @@ class ClubController extends AbstractController
         $entityManger->flush();
 
         return new Response('Deleted');
+    }
+
+    #[Route('/delete1/{id}', name: 'clubDelete1')]
+    public function delete1(ClubRepository $repo, $id): Response
+    {
+        $club = $repo->find($id);
+
+        $repo->remove($club, true);
+
+        return new Response('Deleted');
+    }
+
+    #[Route('/add', name: 'clubAdd')]
+    public function add(Request $request, ManagerRegistry $doctrine): Response
+    {
+        $club = new Club();
+        // $club->setNom('Test');
+
+        $form = $this->createFormBuilder($club)
+            ->add('nom', TextType::class)
+            ->add('save', SubmitType::class)
+            ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted()  &&  $form->isValid()) {
+            $club = $form->getData();
+            $entityManger = $doctrine->getManager();
+            $entityManger->persist($club);
+            $entityManger->flush();
+
+            return $this->redirectToRoute('listClub');
+        }
+
+        return $this->render('club/add.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
 }
