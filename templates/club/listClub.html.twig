@@ -1,5 +1,7 @@
 {% for c in clubs %}
-  {{c.name}}
-  <br> 
-  <a href="{{ path('clubDetails', {id: c.id}) }}"
+  {{c.nom}}
+  |
+  <a href="{{ path('clubDetails', {id: c.id}) }}">details
+  </a>
+  <br>
 {% endfor %}
