@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Club;
+use App\Form\ClubType;
 use App\Repository\ClubRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -97,28 +98,28 @@ class ClubController extends AbstractController
     }
 
     #[Route('/add', name: 'clubAdd')]
-    public function add(Request $request, ManagerRegistry $doctrine): Response
+    public function add(Request $request, ClubRepository $repo): Response
     {
         $club = new Club();
         // $club->setNom('Test');
 
-        $form = $this->createFormBuilder($club)
-            ->add('nom', TextType::class)
-            ->add('save', SubmitType::class)
-            ->getForm();
+        // $form = $this->createFormBuilder($club)
+        //     ->add('nom', TextType::class)
+        //     ->add('save', SubmitType::class)
+        //     ->getForm();
+
+        $form = $this->createForm(ClubType::class, $club);
 
         $form->handleRequest($request);
         if ($form->isSubmitted()  &&  $form->isValid()) {
             $club = $form->getData();
-            $entityManger = $doctrine->getManager();
-            $entityManger->persist($club);
-            $entityManger->flush();
+            $repo->add($club, true);
 
             return $this->redirectToRoute('listClub');
         }
 
-        return $this->render('club/add.html.twig', [
-            'form' => $form->createView()
+        return $this->renderForm('club/add.html.twig', [
+            'form' => $form
         ]);
     }
 }
