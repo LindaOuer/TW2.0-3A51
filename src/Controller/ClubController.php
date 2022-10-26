@@ -122,4 +122,20 @@ class ClubController extends AbstractController
             'form' => $form
         ]);
     }
+
+    #[Route('/update/{id}', name:'update_club')]
+    public function update(Request $req, ClubRepository $repo, $id): Response {
+        $club = $repo->find($id);
+
+        $form = $this->createForm(ClubType::class, $club);
+
+        $form->handleRequest($req);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $repo->add($club, true);
+            return $this->redirectToRoute('listClub');
+        }
+        return $this->renderForm('club/add.html.twig', [
+            'form' => $form
+        ]);
+    }
 }

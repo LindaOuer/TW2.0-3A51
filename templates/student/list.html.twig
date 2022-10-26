@@ -1,0 +1,26 @@
+{{ form(form) }}
+
+  <hr>
+
+  <a href="{{ path('Student_Add') }}">Add Student</a>
+
+  <table border="1">
+    <tr>
+      <th>Id</th>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Classroom</th>
+      <th>Delete</th>
+    </tr>
+    {% for s in students %}
+      <tr>
+        <td>{{ s.id }}</td>
+        <td>{{ s.firstName }}</td>
+        <td>{{ s.lastName }}</td>
+        <td>{{ s.classroom.name }}</td>
+        <td>
+          <a href="{{ path('Student_Delete', {'id': s.id}) }}">Delete</a>
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
